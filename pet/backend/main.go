@@ -17,6 +17,9 @@ import (
 
 var userCollection *mongo.Collection
 var dogCollection *mongo.Collection
+var catCollection *mongo.Collection
+var birdCollection *mongo.Collection
+var otherCollection *mongo.Collection
 
 var jwtKey = []byte("your_secret_key")
 
@@ -35,6 +38,9 @@ func main() {
 
 	InitializeUserCollection()
 	InitializeDogCollection()
+	InitializeCatCollection()
+	InitializeBirdCollection()
+	InitializeOtherCollection()
 
 	app := fiber.New()
 
@@ -94,6 +100,54 @@ func InitializeUserCollection() {
 	log.Println("Connected to MongoDB!")
 
 	userCollection = client.Database("pet").Collection("user")
+}
+
+// Kedi koleksiyonunu başlatma işlevi
+func InitializeCatCollection() {
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal("MongoDB bağlantı hatası:", err)
+	}
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal("MongoDB sunucusuna ping atılamadı:", err)
+	}
+	log.Println("Connected to MongoDB!")
+
+	catCollection = client.Database("pet").Collection("cat")
+}
+
+// Kuş koleksiyonunu başlatma işlevi
+func InitializeBirdCollection() {
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal("MongoDB bağlantı hatası:", err)
+	}
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal("MongoDB sunucusuna ping atılamadı:", err)
+	}
+	log.Println("Connected to MongoDB!")
+
+	birdCollection = client.Database("pet").Collection("bird")
+}
+
+// Diğer hayvan koleksiyonunu başlatma işlevi
+func InitializeOtherCollection() {
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(context.Background(), clientOptions)
+	if err != nil {
+		log.Fatal("MongoDB bağlantı hatası:", err)
+	}
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal("MongoDB sunucusuna ping atılamadı:", err)
+	}
+	log.Println("Connected to MongoDB!")
+
+	otherCollection = client.Database("pet").Collection("other")
 }
 
 type User struct {
@@ -304,21 +358,33 @@ type Dogs struct {
 }
 
 type Cats struct {
-	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
-	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
-	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
+	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
+	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
 }
 
 type Birds struct {
-	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
-	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
-	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
+	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
+	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
 }
 
 type Other struct {
-	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
-	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
-	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
+	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
+	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
 }
 
 type Image struct {
@@ -336,6 +402,141 @@ func CreateDog(c *fiber.Ctx) error {
 		return err
 	}
 	return c.JSON(dog)
+}
+
+// Kedi ekleme işlevi
+func CreateCat(c *fiber.Ctx) error {
+	cat := new(Cats)
+	if err := c.BodyParser(cat); err != nil {
+		return err
+	}
+	_, err := catCollection.InsertOne(context.Background(), cat)
+	if err != nil {
+		return err
+	}
+	return c.JSON(cat)
+}
+
+// Kuş ekleme işlevi
+func CreateBird(c *fiber.Ctx) error {
+	bird := new(Birds)
+	if err := c.BodyParser(bird); err != nil {
+		return err
+	}
+	_, err := birdCollection.InsertOne(context.Background(), bird)
+	if err != nil {
+		return err
+	}
+	return c.JSON(bird)
+}
+
+// Diğer hayvan ekleme işlevi
+func CreateOther(c *fiber.Ctx) error {
+	other := new(Other)
+	if err := c.BodyParser(other); err != nil {
+		return err
+	}
+	_, err := otherCollection.InsertOne(context.Background(), other)
+	if err != nil {
+		return err
+	}
+	return c.JSON(other)
+}
+
+// Kullanıcıların tüm köpeklerini getiren işlev
+func GetDogs(c *fiber.Ctx) error {
+	var dogs []Dogs
+	cursor, err := dogCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var dog Dogs
+		if err := cursor.Decode(&dog); err != nil {
+			return err
+		}
+		dogs = append(dogs, dog)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return err
+	}
+
+	return c.JSON(dogs)
+}
+
+// Kullanıcıların tüm kedilerini getiren işlev
+func GetCats(c *fiber.Ctx) error {
+	var cats []Cats
+	cursor, err := catCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var cat Cats
+		if err := cursor.Decode(&cat); err != nil {
+			return err
+		}
+		cats = append(cats, cat)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return err
+	}
+
+	return c.JSON(cats)
+}
+
+// Kullanıcıların tüm kuşlarını getiren işlev
+func GetBirds(c *fiber.Ctx) error {
+	var birds []Birds
+	cursor, err := birdCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var bird Birds
+		if err := cursor.Decode(&bird); err != nil {
+			return err
+		}
+		birds = append(birds, bird)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return err
+	}
+
+	return c.JSON(birds)
+}
+
+// Kullanıcıların tüm diğer hayvanlarını getiren işlev
+func GetOthers(c *fiber.Ctx) error {
+	var others []Other
+	cursor, err := otherCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var other Other
+		if err := cursor.Decode(&other); err != nil {
+			return err
+		}
+		others = append(others, other)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return err
+	}
+
+	return c.JSON(others)
 }
 
 func GetDogsByEmail(c *fiber.Ctx) error {
@@ -369,5 +570,16 @@ func GetDogsByEmail(c *fiber.Ctx) error {
 func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", CreateDog)
+	app.Get("/dog", GetDogs) // Tüm köpekleri getir
 	app.Get("/dog/:email", GetDogsByEmail)
+
+	app.Post("/cat/add", CreateCat)
+	app.Get("/cat", GetCats) // Tüm kedileri getir
+
+	app.Post("/bird/add", CreateBird)
+	app.Get("/bird", GetBirds) // Tüm kuşları getir
+
+	app.Post("/other/add", CreateOther)
+	app.Get("/other", GetOthers) // Tüm diğer hayvanları getir
+
 }
