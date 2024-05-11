@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -14,7 +16,7 @@ import (
 )
 
 var userCollection *mongo.Collection
-var petList *mongo.Collection
+var dogCollection *mongo.Collection
 
 var jwtKey = []byte("your_secret_key")
 
@@ -32,7 +34,7 @@ func main() {
 	defer client.Disconnect(context.Background())
 
 	InitializeUserCollection()
-	InitializePetCollection()
+	InitializeDogCollection()
 
 	app := fiber.New()
 
@@ -95,12 +97,16 @@ func InitializeUserCollection() {
 }
 
 type User struct {
-	ID       string `json:"id,omitempty" bson:"_id,omitempty"`
-	Email    string `json:"email,omitempty" bson:"email,omitempty"`
-	Password string `json:"password,omitempty" bson:"password,omitempty"`
-	Location string `json:"location,omitempty" bson:"location,omitempty"`
-	Phone    string `json:"phone,omitempty" bson:"phone,omitempty"`
-	Username string `json:"username,omitempty" bson:"username,omitempty"`
+	ID       string  `json:"id,omitempty" bson:"_id,omitempty"`
+	Email    string  `json:"email,omitempty" bson:"email,omitempty"`
+	Password string  `json:"password,omitempty" bson:"password,omitempty"`
+	Location string  `json:"location,omitempty" bson:"location,omitempty"`
+	Phone    string  `json:"phone,omitempty" bson:"phone,omitempty"`
+	Username string  `json:"username,omitempty" bson:"username,omitempty"`
+	Dogs     []Dogs  `json:"dogs,omitempty" bson:"dogs,omitempty"`
+	Cats     []Cats  `json:"cats,omitempty" bson:"cats,omitempty"`
+	Birds    []Birds `json:"birds,omitempty" bson:"birds,omitempty"`
+	Other    []Other `json:"other,omitempty" bson:"other,omitempty"`
 }
 
 func UpdateUser(c *fiber.Ctx) error {
@@ -151,38 +157,6 @@ func GetUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-// func Login(c *fiber.Ctx) error {
-
-// 	var loginData User
-// 	if err := c.BodyParser(&loginData); err != nil {
-// 		return err
-// 	}
-
-// 	var user User
-// 	err := userCollection.FindOne(context.Background(), bson.M{"email": loginData.Email}).Decode(&user)
-// 	if err != nil {
-// 		if err == mongo.ErrNoDocuments {
-
-// 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
-// 				"message": "Kullanıcı bulunamadı",
-// 			})
-// 		}
-
-// 		log.Println("Kullanıcı alınırken bir hata oluştu:", err)
-// 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{})
-// 	}
-
-// 	if loginData.Password != user.Password {
-
-// 		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{})
-// 	}
-
-// 	return c.JSON(fiber.Map{
-// 		"message": "Giriş başarılı",
-// 		"user":    user,
-// 	})
-// }
-
 func CreateToken(userID string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 
@@ -200,7 +174,54 @@ func CreateToken(userID string) (string, error) {
 		return "", err
 	}
 
+	fmt.Println(token, "tokenn33")
+	fmt.Println(tokenString, "tokenString")
+
 	return tokenString, nil
+}
+
+func ParseToken(tokenString string) (*Claims, error) {
+	// JWT'nin içeriğini ayrıştır
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	fmt.Println(token, "ParseToken")
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			return nil, errors.New("Invalid token signature")
+
+		}
+		fmt.Println(token, "ParseToken22")
+		return nil, err
+	}
+
+	// Token'ı ayrıştırırken belirtilen Claims yapısına dönüştür
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		return claims, nil
+	} else {
+		return nil, errors.New("Invalid token claims")
+	}
+}
+
+func getUserIDFromToken(tokenString string) (string, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(token, "tokenn")
+	claims, ok := token.Claims.(*Claims)
+	if !ok || !token.Valid {
+		return "", errors.New("Geçersiz token")
+
+	}
+	fmt.Println(token, "tokenn")
+
+	fmt.Println(claims.UserID, "claims.UserID")
+	fmt.Println(tokenString, "tokenString33")
+
+	return claims.UserID, nil
 }
 
 func Login(c *fiber.Ctx) error {
@@ -257,7 +278,7 @@ func UserEndpoints(app *fiber.App) {
 
 //adaption
 
-func InitializePetCollection() {
+func InitializeDogCollection() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
@@ -269,44 +290,57 @@ func InitializePetCollection() {
 	}
 	log.Println("Connected to MongoDB!")
 
-	petList = client.Database("pet").Collection("pet")
+	dogCollection = client.Database("pet").Collection("dog")
 }
 
-type Pet struct {
-	ID     string `json:"id,omitempty" bson:"_id,omitempty"`
-	Name   string `json:"name,omitempty" bson:"name,omitempty"`
-	Type   string `json:"type,omitempty" bson:"type,omitempty"`
-	Age    int    `json:"age,omitempty" bson:"age,omitempty"`
-	Gender string `json:"gender,omitempty" bson:"gender,omitempty"`
-	//Images []Image `json:"images,omitempty" bson:"images,omitempty"`
-	OwnerEmail string `json:"ownerEmail,omitempty" bson:"ownerEmail,omitempty"`
+type Dogs struct {
+	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
+	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
+	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
 }
 
-// type Image struct {
-// 	URL  string `json:"url,omitempty" bson:"url,omitempty"`
-// 	Type string `json:"type,omitempty" bson:"type,omitempty"`
-// }
+type Cats struct {
+	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
+	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
+	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+}
 
-func CreatePet(c *fiber.Ctx) error {
-	userEmail := c.Locals("userEmail").(string)
+type Birds struct {
+	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
+	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
+	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+}
 
-	pet := new(Pet)
-	if err := c.BodyParser(pet); err != nil {
+type Other struct {
+	ID    string `json:"id,omitempty" bson:"_id,omitempty"`
+	DogId string `json:"DogId,omitempty" bson:"DogId,omitempty"`
+	Name  string `json:"password,omitempty" bson:"password,omitempty"`
+}
+
+type Image struct {
+	URL  string `json:"url,omitempty" bson:"url,omitempty"`
+	Type string `json:"type,omitempty" bson:"type,omitempty"`
+}
+
+func CreateDog(c *fiber.Ctx) error {
+	dog := new(Dogs)
+	if err := c.BodyParser(dog); err != nil {
 		return err
 	}
-	pet.OwnerEmail = userEmail
-
-	// Pet belgesini veritabanına ekle
-	_, err := petList.InsertOne(context.Background(), pet)
+	_, err := dogCollection.InsertOne(context.Background(), dog)
 	if err != nil {
 		return err
 	}
-	return c.JSON(pet)
+	return c.JSON(dog)
 }
+
 func PetEndpoints(app *fiber.App) {
 
-	app.Post("/pet/add", CreatePet)
+	app.Post("/dog/add", CreateDog)
 	app.Put("/user/pet/:id", UpdateUser)
 	app.Delete("/user/delete/:id", DeleteUser)
-	app.Get("/user/:email", GetUser)
 }

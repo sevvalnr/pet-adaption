@@ -114,7 +114,10 @@ const LogIn = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-            });
+
+               
+            }
+        );
 
             const data = await response.json();
 
@@ -132,6 +135,7 @@ const LogIn = () => {
         } catch (error) {
             console.error('hata cnm', error);
         }
+
     };
 
     return (
