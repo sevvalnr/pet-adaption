@@ -338,9 +338,36 @@ func CreateDog(c *fiber.Ctx) error {
 	return c.JSON(dog)
 }
 
+func GetDogsByEmail(c *fiber.Ctx) error {
+	// Talep edilen e-posta adresini al
+	email := c.Params("email")
+
+	// E-posta adresine göre köpekleri bul
+	filter := bson.M{"email": email}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+		// Hata durumunda geri dön
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch dogs",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	// Köpekleri bir diziye ekleyerek döndür
+	var dogs []Dogs
+	if err := cursor.All(context.Background(), &dogs); err != nil {
+		// Hata durumunda geri dön
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch dogs",
+		})
+	}
+
+	// Köpekleri JSON formatında döndür
+	return c.JSON(dogs)
+}
+
 func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", CreateDog)
-	app.Put("/user/pet/:id", UpdateUser)
-	app.Delete("/user/delete/:id", DeleteUser)
+	app.Get("/dog/:email", GetDogsByEmail)
 }

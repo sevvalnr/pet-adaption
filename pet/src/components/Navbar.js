@@ -38,6 +38,9 @@ const Navbar = ({ isLoggedIn, dispatch }) => {
         <Link to="/pets">Pets</Link>
       </div>
       <div>
+        <Link to="/adopt">Adopt</Link>
+      </div>
+      <div>
         {isLoggedIn ? (
           <button onClick={handleLogout}>Log Out</button>
         ) : (
