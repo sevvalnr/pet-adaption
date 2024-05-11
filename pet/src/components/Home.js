@@ -12,8 +12,9 @@ const Home = () => {
         <button className="ad-button">I want to put an ad</button>
       </Link>
     </div>
-    
+
   );
+  
 };
 
 export default Home;
