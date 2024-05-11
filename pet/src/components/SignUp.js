@@ -26,6 +26,7 @@ const SignUp = () => {
       console.error('Error signing up:', error);
     }
   };
+  
 
   return (
     <div className="signup-container">
