@@ -1,26 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/Adopt.css'; // CSS dosyasını ekleyin
 
 const Adopt = () => {
   return (
-    <div>
-      <h2>Adopt a Pet</h2>
-      <div>
-        <Link to="/adopt/dog">
-          <button>Adopt Dog</button>
+    <div className="adopt-container">
+      <h2>Pet</h2>
+      <div className="button-container">
+        <Link to="/adoptDog">
+          <button> Dog</button>
         </Link>
-        <Link to="/adopt/cat">
-          <button>Adopt Cat</button>
+        <Link to="/adoptCat">
+          <button> Cat</button>
         </Link>
-        <Link to="/adopt/bird">
-          <button>Adopt Bird</button>
+        <Link to="/adoptBird">
+          <button> Bird</button>
         </Link>
-        <Link to="/adopt/other">
-          <button>Adopt Other</button>
+        <Link to="/adoptOther">
+          <button> Other</button>
         </Link>
       </div>
     </div>
   );
-};
+}; 
 
 export default Adopt;

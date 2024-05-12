@@ -102,7 +102,6 @@ func InitializeUserCollection() {
 	userCollection = client.Database("pet").Collection("user")
 }
 
-// Kedi koleksiyonunu başlatma işlevi
 func InitializeCatCollection() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -118,7 +117,6 @@ func InitializeCatCollection() {
 	catCollection = client.Database("pet").Collection("cat")
 }
 
-// Kuş koleksiyonunu başlatma işlevi
 func InitializeBirdCollection() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -134,7 +132,6 @@ func InitializeBirdCollection() {
 	birdCollection = client.Database("pet").Collection("bird")
 }
 
-// Diğer hayvan koleksiyonunu başlatma işlevi
 func InitializeOtherCollection() {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -235,7 +232,6 @@ func CreateToken(userID string) (string, error) {
 }
 
 func ParseToken(tokenString string) (*Claims, error) {
-	// JWT'nin içeriğini ayrıştır
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
@@ -248,8 +244,6 @@ func ParseToken(tokenString string) (*Claims, error) {
 		fmt.Println(token, "ParseToken22")
 		return nil, err
 	}
-
-	// Token'ı ayrıştırırken belirtilen Claims yapısına dönüştür
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims, nil
 	} else {
@@ -348,43 +342,48 @@ func InitializeDogCollection() {
 }
 
 type Dogs struct {
-	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
-	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
-	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
-	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
-	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
-	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
+	ID          string    `json:"id,omitempty" bson:"_id,omitempty"`
+	Email       string    `json:"email,omitempty" bson:"email,omitempty"`
+	Name        string    `json:"name,omitempty" bson:"name,omitempty"`
+	Age         string    `json:"age,omitempty" bson:"age,omitempty"`
+	Type        string    `json:"type,omitempty" bson:"type,omitempty"`
+	CreatedAt   time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Location    string    `json:"location,omitempty" bson:"location,omitempty"`
+	Description string    `json:"description,omitempty" bson:"description,omitempty"`
+	Image       []Image   `json:"image,omitempty" bson:"image,omitempty"`
 }
 
 type Cats struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
-	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
 	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
+	Image     []Image   `json:"image,omitempty" bson:"image,omitempty"`
 }
 
 type Birds struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
-	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
 	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
+	Image     []Image   `json:"image,omitempty" bson:"image,omitempty"`
 }
 
 type Other struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
-	Name      string    `json:"password,omitempty" bson:"password,omitempty"`
+	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
 	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
+	Image     []Image   `json:"image,omitempty" bson:"image,omitempty"`
 }
 
 type Image struct {
@@ -404,7 +403,6 @@ func CreateDog(c *fiber.Ctx) error {
 	return c.JSON(dog)
 }
 
-// Kedi ekleme işlevi
 func CreateCat(c *fiber.Ctx) error {
 	cat := new(Cats)
 	if err := c.BodyParser(cat); err != nil {
@@ -417,7 +415,6 @@ func CreateCat(c *fiber.Ctx) error {
 	return c.JSON(cat)
 }
 
-// Kuş ekleme işlevi
 func CreateBird(c *fiber.Ctx) error {
 	bird := new(Birds)
 	if err := c.BodyParser(bird); err != nil {
@@ -430,7 +427,6 @@ func CreateBird(c *fiber.Ctx) error {
 	return c.JSON(bird)
 }
 
-// Diğer hayvan ekleme işlevi
 func CreateOther(c *fiber.Ctx) error {
 	other := new(Other)
 	if err := c.BodyParser(other); err != nil {
@@ -443,7 +439,6 @@ func CreateOther(c *fiber.Ctx) error {
 	return c.JSON(other)
 }
 
-// Kullanıcıların tüm köpeklerini getiren işlev
 func GetDogs(c *fiber.Ctx) error {
 	var dogs []Dogs
 	cursor, err := dogCollection.Find(context.Background(), bson.M{})
@@ -467,7 +462,6 @@ func GetDogs(c *fiber.Ctx) error {
 	return c.JSON(dogs)
 }
 
-// Kullanıcıların tüm kedilerini getiren işlev
 func GetCats(c *fiber.Ctx) error {
 	var cats []Cats
 	cursor, err := catCollection.Find(context.Background(), bson.M{})
@@ -490,8 +484,6 @@ func GetCats(c *fiber.Ctx) error {
 
 	return c.JSON(cats)
 }
-
-// Kullanıcıların tüm kuşlarını getiren işlev
 func GetBirds(c *fiber.Ctx) error {
 	var birds []Birds
 	cursor, err := birdCollection.Find(context.Background(), bson.M{})
@@ -515,7 +507,6 @@ func GetBirds(c *fiber.Ctx) error {
 	return c.JSON(birds)
 }
 
-// Kullanıcıların tüm diğer hayvanlarını getiren işlev
 func GetOthers(c *fiber.Ctx) error {
 	var others []Other
 	cursor, err := otherCollection.Find(context.Background(), bson.M{})
@@ -540,46 +531,64 @@ func GetOthers(c *fiber.Ctx) error {
 }
 
 func GetDogsByEmail(c *fiber.Ctx) error {
-	// Talep edilen e-posta adresini al
 	email := c.Params("email")
 
-	// E-posta adresine göre köpekleri bul
 	filter := bson.M{"email": email}
 	cursor, err := dogCollection.Find(context.Background(), filter)
 	if err != nil {
-		// Hata durumunda geri dön
+
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch dogs",
 		})
 	}
 	defer cursor.Close(context.Background())
 
-	// Köpekleri bir diziye ekleyerek döndür
 	var dogs []Dogs
 	if err := cursor.All(context.Background(), &dogs); err != nil {
-		// Hata durumunda geri dön
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch dogs",
 		})
 	}
 
-	// Köpekleri JSON formatında döndür
+	return c.JSON(dogs)
+}
+func GetDogById(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	filter := bson.M{"id": id}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch dogs by id",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var dogs []Dogs
+	if err := cursor.All(context.Background(), &dogs); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch dogs",
+		})
+	}
+
 	return c.JSON(dogs)
 }
 
 func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", CreateDog)
-	app.Get("/dog", GetDogs) // Tüm köpekleri getir
+	app.Get("/dog", GetDogs)
 	app.Get("/dog/:email", GetDogsByEmail)
+	app.Get("/dog/:id", GetDogById)
 
 	app.Post("/cat/add", CreateCat)
-	app.Get("/cat", GetCats) // Tüm kedileri getir
+	app.Get("/cat", GetCats)
 
 	app.Post("/bird/add", CreateBird)
-	app.Get("/bird", GetBirds) // Tüm kuşları getir
+	app.Get("/bird", GetBirds)
 
 	app.Post("/other/add", CreateOther)
-	app.Get("/other", GetOthers) // Tüm diğer hayvanları getir
+	app.Get("/other", GetOthers)
 
 }

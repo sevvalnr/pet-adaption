@@ -35,7 +35,7 @@ const Navbar = ({ isLoggedIn, dispatch }) => {
         <Link to="/signUp">SignUp</Link>
       </div>
       <div>
-        <Link to="/pets">Pets</Link>
+        <Link to="/addPet">Pets</Link>
       </div>
       <div>
         <Link to="/adopt">Adopt</Link>

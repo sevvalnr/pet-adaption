@@ -1,0 +1,32 @@
+.adopt-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .button-container button {
+margin: 30px;
+margin-top: 80%;
+    padding: 30px 50px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #070708; /* Örnek bir renk, istediğiniz rengi değiştirebilirsiniz */
+    color: #0c8a27;
+    cursor: pointer;
+
+  }
+  
+  .button-container button:hover {
+    background-color: #0056b3; /* Örnek bir hover rengi */
+  }
+  
