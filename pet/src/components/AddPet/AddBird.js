@@ -95,7 +95,7 @@ const AddBird = () => {
           Images:
           <input type="file" name="image" onChange={handleImageChange} accept="image/*" multiple />
         </label>
-        <button type="submit" className="submit-button">Create Dog</button>
+        <button type="submit" className="submit-button">Create Bird</button>
       </form>
     </div>
   );

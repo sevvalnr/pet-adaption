@@ -552,6 +552,73 @@ func GetDogsByEmail(c *fiber.Ctx) error {
 
 	return c.JSON(dogs)
 }
+func GetCatsByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	filter := bson.M{"email": email}
+	cursor, err := catCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch cats",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var cats []Cats
+	if err := cursor.All(context.Background(), &cats); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch cats",
+		})
+	}
+
+	return c.JSON(cats)
+}
+func GetBirdsByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	filter := bson.M{"email": email}
+	cursor, err := birdCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch birds",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var birds []Birds
+	if err := cursor.All(context.Background(), &birds); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch birds",
+		})
+	}
+
+	return c.JSON(birds)
+}
+func GetOthersByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	filter := bson.M{"email": email}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch others",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var others []Other
+	if err := cursor.All(context.Background(), &others); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch others",
+		})
+	}
+
+	return c.JSON(others)
+}
+
 func GetDogById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -574,7 +641,72 @@ func GetDogById(c *fiber.Ctx) error {
 
 	return c.JSON(dogs)
 }
+func GetCatById(c *fiber.Ctx) error {
+	id := c.Params("id")
 
+	filter := bson.M{"id": id}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch cats by id",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var cats []Cats
+	if err := cursor.All(context.Background(), &cats); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch cats",
+		})
+	}
+
+	return c.JSON(cats)
+}
+func GetBirdById(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	filter := bson.M{"id": id}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch birds by id",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var birds []Birds
+	if err := cursor.All(context.Background(), &birds); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch birds",
+		})
+	}
+
+	return c.JSON(birds)
+}
+func GetOtherById(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	filter := bson.M{"id": id}
+	cursor, err := dogCollection.Find(context.Background(), filter)
+	if err != nil {
+
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch others by id",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	var others []Other
+	if err := cursor.All(context.Background(), &others); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to fetch others",
+		})
+	}
+
+	return c.JSON(others)
+}
 func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", CreateDog)
@@ -584,11 +716,14 @@ func PetEndpoints(app *fiber.App) {
 
 	app.Post("/cat/add", CreateCat)
 	app.Get("/cat", GetCats)
+	app.Get("/cat/:email", GetCatsByEmail)
 
 	app.Post("/bird/add", CreateBird)
 	app.Get("/bird", GetBirds)
+	app.Get("/bird/:email", GetBirdsByEmail)
 
 	app.Post("/other/add", CreateOther)
 	app.Get("/other", GetOthers)
+	app.Get("/other/:email", GetOthersByEmail)
 
 }

@@ -14,9 +14,9 @@ const AdoptCat = () => {
 
   return (
     <div>
-      <h2>Dogs</h2>
+      <h2>Cats</h2>
       {/* Butonu ekleyin ve "/addDog" sayfasına yönlendirin */}
-      <Link to="/addDog" className="add-dog-button">Do you want to add a dog?</Link>
+      <Link to="/addDog" className="add-dog-button">Do you want to add a cat?</Link>
       <div className="dog-grid">
         {dogs.map(dog => (
           <div key={dog.id} className="dog-card">
