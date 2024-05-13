@@ -1,0 +1,49 @@
+/* AdoptCat.css */
+
+.cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Her sırada üç kart */
+    grid-gap: 20px;
+    justify-items: center;
+  
+  }
+  
+  .cat-card {
+    background-color: #b2bde4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 100px;
+    cursor: pointer;
+  }
+  
+  .cat-card:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .selected-cat-details {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .add-cat-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .add-cat-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Seçili kedi detaylarının stilini ayarla */
+  .selected-cat-details p {
+    margin: 10px 0;
+  }
+  
+  /* Diğer stillendirmeleri buraya ekleyebilirsiniz */
+  
