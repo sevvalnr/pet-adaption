@@ -1,53 +1,65 @@
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  .login-form {
-    width: 300px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .login-form label {
-    margin-bottom: 8px;
-  }
-  
-  .login-form input[type="email"],
-  .login-form input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .login-form button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .login-form button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    margin-bottom: 16px;
-  }
-  
-  .logged-in-message {
-    color: green;
-    margin-bottom: 16px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.form-container {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-form {
+  width: 100%; /* Formun genişliğini tamamen doldurması için */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-form label {
+  margin-bottom: 8px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form button[type="submit"] {
+  width: 100%;
+  padding: 10px 30px; /* Top ve bottom padding 12px, left ve right padding 20px */
+  border: none;
+  border-radius: 4px;
+  background-color: #7e5eb1;
+  color: white;
+  cursor: pointer;
+  display: inline-flex; /* Butonun içeriğine göre genişliğini ayarlar */
+  width: auto; /* Genişliği içeriğe göre otomatik olarak ayarlar */
+
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: #482e74;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 16px;
+}
+
+.logged-in-message {
+  color: green;
+  margin-bottom: 16px;
+}

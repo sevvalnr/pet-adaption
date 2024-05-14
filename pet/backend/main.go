@@ -357,7 +357,7 @@ type Cats struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
-	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
+	Age       string    `json:"age,omitempty" bson:"age,omitempty"`
 	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	Location  string    `json:"location,omitempty" bson:"location,omitempty"`

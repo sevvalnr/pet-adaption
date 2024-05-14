@@ -82,6 +82,7 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from './action/userAction';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import "./styles/Login.css";
 
 const LogIn = () => {
     const [email, setEmail] = useState('');
@@ -139,8 +140,8 @@ const LogIn = () => {
     };
 
     return (
-        <div>
-            <h2>Kullanıcı Girişi</h2>
+        <div className="login-container">
+            <h2>User Log In</h2>
             {isLoggedIn ? (
                 <div>
                     <p>Zateen.</p>
@@ -149,16 +150,16 @@ const LogIn = () => {
             ) : (
                 <>
                     {error && <div style={{ color: 'red' }}>{error}</div>}
-                    <form onSubmit={handleSubmit}>
+                    <form className='login-form' onSubmit={handleSubmit}>
                         <div>
                             <label>Email:</label>
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div>
-                            <label>Şifre:</label>
+                            <label>Password:</label>
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
-                        <button type="submit">Giriş Yap</button>
+                        <button type="submit">Log In</button>
                     </form>
                 </>
             )}

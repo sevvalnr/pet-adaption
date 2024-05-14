@@ -5,6 +5,7 @@ import { logoutSuccess } from './action/userAction';
 import Cookies from 'js-cookie';
 import "./styles/Navbar.css"; 
 
+
 const Navbar = ({ isLoggedIn, dispatch }) => {
   useEffect(() => {
     // Her bileşen yeniden render edildiğinde cookie kontrolü yapılacak
@@ -34,7 +35,7 @@ const Navbar = ({ isLoggedIn, dispatch }) => {
       <div style={{ display: isLoggedIn ? 'none' : 'block' }}>
         <Link to="/signUp">SignUp</Link>
       </div>
-      <div>
+      <div style={{ display: isLoggedIn ? 'block' : 'none' }}>
         <Link to="/addPet">Pets</Link>
       </div>
       <div>
