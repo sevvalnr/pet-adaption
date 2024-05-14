@@ -130,7 +130,7 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
       {updateError && <p>{updateError}</p>}
 
       Kullanıcının ilanlarını gösterme */}
-      <h2 style={{ marginLeft: '390px' , marginTop: "15px",marginBottom: "20px"}}>User Advertisement</h2>
+  <h2 style={{ margin: '15px auto 20px', width: 'fit-content' }}>User Advertisement</h2>
       <div className="profile-grid">
 
         {userDogAds.map((dogAd, index) => (

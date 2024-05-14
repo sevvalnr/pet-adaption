@@ -6,6 +6,8 @@
     max-width: 50%;
     margin-left: 50px;
     margin-left: 20px;
+    justify-content: center; /* Sütunları yatayda ortala */
+    margin: 0 auto;
   }
   
   .profile-grid-item4 {
