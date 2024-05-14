@@ -21,9 +21,10 @@ const AddBird = () => {
   };
 
   const handleImageChange = (e) => {
-    // Birden fazla dosya eklemek için dosyaları bir diziye ekleyin
-    setFormData({ ...formData, images: [...formData.images, e.target.files[0]] });
+    const selectedImages = Array.from(e.target.files);
+    setFormData({ ...formData, images: selectedImages });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ const AddBird = () => {
       formData.images.forEach((image, index) => {
         formDataWithImages.append(`image${index}`, image);
       });
+      
 
       const response = await axios.post('http://localhost:3000/bird/add', formDataWithImages);
       console.log('Dog signed up successfully:', response.data);

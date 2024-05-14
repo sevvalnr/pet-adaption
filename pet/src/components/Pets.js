@@ -9,24 +9,28 @@ const AddPetPage = () => {
       <div className="button-container">
         <div className='buttonDog-container'>
         <Link to="/addDog">
-          <button> Dog</button>
+          <button> </button>
         </Link>
+        <div>Dog</div>
         </div>
         
         <div className='buttonCat-container'>
         <Link to="/addCat">
-          <button> Cat</button>
+          <button> </button>
         </Link>
+        <div>Cat</div>
         </div>
         <div className='buttonBird-container'>
         <Link to="/addBird">
-          <button> Bird</button>
+          <button> </button>
         </Link>
+        <div>Bird</div>
         </div>
         <div className='buttonOther-container'>
         <Link to="/addOther">
-          <button> Other</button>
+          <button> </button>
         </Link>
+        <div>Other</div>
         </div>
       </div> 
     </div>

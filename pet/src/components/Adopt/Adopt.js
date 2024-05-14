@@ -6,41 +6,31 @@ const Adopt = () => {
   return (
     <div className="adopt-container">
       <h2>Pet</h2>
-      {/* <div className="button-container">
-        <Link to="/adoptDog">
-          <button> Dog</button>
-        </Link>
-        <Link to="/adoptCat">
-          <button> Cat</button>
-        </Link>
-        <Link to="/adoptBird">
-          <button> Bird</button>
-        </Link>
-        <Link to="/adoptOther">
-          <button> Other</button>
-        </Link>
-      </div> */}
           <div className="button-container">
         <div className='buttonDog-container'>
         <Link to="/adoptDog">
-          <button> Dog</button>
+          <button> </button>
         </Link>
+        <div>Dog</div>
         </div>
         
         <div className='buttonCat-container'>
         <Link to="/adoptCat">
-          <button> Cat</button>
+          <button> </button>
         </Link>
+        <div>Cat</div>
         </div>
         <div className='buttonBird-container'>
         <Link to="/adoptBird">
-          <button> Bird</button>
+          <button> </button>
         </Link>
+        <div>Bird</div>
         </div>
         <div className='buttonOther-container'>
         <Link to="/adOther">
-          <button> Other</button>
+          <button> </button>
         </Link>
+        <div>Other</div>
         </div>
       </div> 
     </div>

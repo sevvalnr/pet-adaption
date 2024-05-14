@@ -400,7 +400,29 @@ func CreateDog(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	// Fotoğraf dosyasını almak için bir yol oluşturun
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+
+	// Fotoğraf dosyasını kaydedin (örneğin, uploads klasörüne)
+	filename := fmt.Sprintf("./uploads/%s", file.Filename)
+	if err := c.SaveFile(file, filename); err != nil {
+		return err
+	}
+
+	// Fotoğraf URL'sini belgeye ekleyin
+	dog.Image = append(dog.Image, Image{URL: filename, Type: file.Header.Get("Content-Type")})
+
+	_, err = dogCollection.InsertOne(context.Background(), dog)
+	if err != nil {
+		return err
+	}
+
 	return c.JSON(dog)
+
 }
 
 func CreateCat(c *fiber.Ctx) error {
@@ -424,6 +446,27 @@ func CreateBird(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	// Fotoğraf dosyasını almak için bir yol oluşturun
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+
+	// Fotoğraf dosyasını kaydedin (örneğin, uploads klasörüne)
+	filename := fmt.Sprintf("./uploads/%s", file.Filename)
+	if err := c.SaveFile(file, filename); err != nil {
+		return err
+	}
+
+	// Fotoğraf URL'sini belgeye ekleyin
+	bird.Image = append(bird.Image, Image{URL: filename, Type: file.Header.Get("Content-Type")})
+
+	_, err = dogCollection.InsertOne(context.Background(), bird)
+	if err != nil {
+		return err
+	}
+
 	return c.JSON(bird)
 }
 
