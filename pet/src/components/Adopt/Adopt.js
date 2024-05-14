@@ -27,7 +27,7 @@ const Adopt = () => {
         <div>Bird</div>
         </div>
         <div className='buttonOther-container'>
-        <Link to="/adOther">
+        <Link to="/adoptOther">
           <button> </button>
         </Link>
         <div>Other</div>

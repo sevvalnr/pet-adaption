@@ -1,11 +1,13 @@
 .form-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+  max-width: 400px;
+  margin: 100px auto 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-height: 100vh; /* Maksimum yüksekliği ekran yüksekliği olarak ayarlayın */
+  overflow-y: auto; /* Aşağı doğru kaydırmayı etkinleştirin */
+}
   
   .form-container h2 {
     margin-bottom: 20px;

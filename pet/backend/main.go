@@ -357,7 +357,7 @@ type Cats struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
-	Age       string    `json:"age,omitempty" bson:"age,omitempty"`
+	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
 	Type      string    `json:"type,omitempty" bson:"type,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	Location  string    `json:"location,omitempty" bson:"location,omitempty"`
@@ -750,6 +750,26 @@ func GetOtherById(c *fiber.Ctx) error {
 
 	return c.JSON(others)
 }
+
+func DeleteCat(c *fiber.Ctx) error {
+	// Parametre olarak gelen kedi ismini al
+	name := c.Params("name")
+
+	// Veritabanında kedi ismiyle eşleşen bir kaydı sil
+	res, err := catCollection.DeleteOne(context.Background(), bson.M{"name": name})
+	if err != nil {
+		return err
+	}
+
+	// Silinen kayıt olmadığını kontrol et
+	if res.DeletedCount == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Cat not found"})
+	}
+
+	// Başarı durumunu döndür
+	return c.JSON(fiber.Map{"message": "Cat deleted successfully"})
+}
+
 func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", CreateDog)
@@ -760,6 +780,7 @@ func PetEndpoints(app *fiber.App) {
 	app.Post("/cat/add", CreateCat)
 	app.Get("/cat", GetCats)
 	app.Get("/cat/:email", GetCatsByEmail)
+	app.Delete("/cats:name", DeleteCat)
 
 	app.Post("/bird/add", CreateBird)
 	app.Get("/bird", GetBirds)

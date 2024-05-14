@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { updateUser } from './action/userAction'; // actions.js dosyasına göre düzenleyin
 import React, { useState, useEffect } from 'react';
+import './styles/Profile.css'; // 
 
 // import AddDog from './AddDog'; 
 // import AddCat from './AddCat'; 
@@ -98,6 +99,17 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
       setIsUpdating(false);
     }
   };
+  // const handleDeleteCat = async (name) => {
+  //   try {
+  //     const response = await axios.delete(`http://localhost:3000/cats/${name}`);
+  //     alert(response.data.message);
+  //     // Kedi silindikten sonra ilanları yeniden yükle
+  //     fetchUserCatAds();
+  //   } catch (error) {
+  //     console.error('Error deleting cat:', error);
+  //     alert('An error occurred while deleting the cat. Please try again later.');
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,48 +123,50 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
   return (
     <div>
       {/* Kullanıcı bilgilerini gösterme */}
-      <input type="text" name="email" value={userInfo.email} onChange={handleChange} placeholder="email" />
+      {/* <input type="text" name="email" value={userInfo.email} onChange={handleChange} placeholder="email" />
       <button onClick={handleUpdate} disabled={isUpdating}>
         {isUpdating ? 'Güncelleniyor...' : 'Güncelle'}
       </button>
       {updateError && <p>{updateError}</p>}
 
-      {/* Kullanıcının ilanlarını gösterme */}
-      <h2>User Advertisement</h2>
-      <ul>
+      Kullanıcının ilanlarını gösterme */}
+      <h2 style={{ marginLeft: '390px' , marginTop: "15px",marginBottom: "20px"}}>User Advertisement</h2>
+      <div className="profile-grid">
+
         {userDogAds.map((dogAd, index) => (
-          <li key={index}>
+             
+          <div key={index} className="profile-grid-item1">
+               <h3>Dog</h3>
             <p><strong>Name:</strong> {dogAd.name}</p>
             <p><strong>Type:</strong> {dogAd.type}</p>
             {/* Diğer ilan bilgilerini gösterme */}
-          </li>
-        )
-        )}
+          </div>
+        ))}
         {userCatAds.map((catAd, index) => (
-          <li key={index}>
+          <div key={index} className="profile-grid-item2">
+                 <h3>Cat</h3>
             <p><strong>Name:</strong> {catAd.name}</p>
             <p><strong>Type:</strong> {catAd.type}</p>
             {/* Diğer ilan bilgilerini gösterme */}
-          </li>
-        )
-        )}
+          </div>
+        ))}
         {userBirdAds.map((birdAd, index) => (
-          <li key={index}>
+          <div key={index} className="profile-grid-item3">
+                 <h3>Bird</h3>
             <p><strong>Name:</strong> {birdAd.name}</p>
             <p><strong>Type:</strong> {birdAd.type}</p>
             {/* Diğer ilan bilgilerini gösterme */}
-          </li>
-        )
-        )}
+          </div>
+        ))}
         {userOtherAds.map((otherAd, index) => (
-          <li key={index}>
+          <div key={index} className="profile-grid-item4">
+                 <h3>Other</h3>
             <p><strong>Name:</strong> {otherAd.name}</p>
             <p><strong>Type:</strong> {otherAd.type}</p>
             {/* Diğer ilan bilgilerini gösterme */}
-          </li>
-        )
-        )}
-      </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

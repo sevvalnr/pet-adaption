@@ -26,7 +26,7 @@ const AdoptOther = () => {
     <div>
       <h2>others</h2>
       {/* Butonu ekleyin ve "/addDog" sayfasına yönlendirin */}
-      <Link to="/addDog" className="add-dog-button">Do you want to add a Other?</Link>
+      <Link to="/addOther" className="add-dog-button">Do you want to add a Other?</Link>
       <div className="dog-grid">
         {others.map(other => (
           <div key={other.id} className="dog-card" onClick={() => handleCatClick(other)}>

@@ -1,0 +1,32 @@
+/* Assuming you have a separate CSS file or a style tag */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Adjust the gap as needed */
+    max-width: 50%;
+    margin-left: 50px;
+    margin-left: 20px;
+  }
+  
+  .profile-grid-item4 {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .profile-grid-item1 {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }  .profile-grid-item2 {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }  .profile-grid-item3 {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }

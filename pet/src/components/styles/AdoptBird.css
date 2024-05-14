@@ -1,0 +1,66 @@
+.bird-container {
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1300px;
+}
+
+.bird-title {
+    font-size: 2em;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 20px;
+}
+
+.add-bird-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 1075px;
+}
+
+.bird-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.bird-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Her sırada iki kart */
+    grid-gap: 20px;
+    justify-items: center;
+    margin-top: 100px;
+}
+
+.bird-card {
+    background-color: #b2bde4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 150px; /* Kart boyutunu artırın */
+    cursor: pointer;
+}
+
+.bird-card p {
+    margin: 5px 0;
+}
+
+.bird-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+.bottom-right-image {
+    position: fixed;
+    bottom: 20px; /* Ekranın altından 20px yukarıda */
+    left: 20px; /* Ekranın sağından 20px içeride */
+    width: 300px; /* İstediğiniz genişlik */
+    height: auto; /* Oranlarını korur */
+}
