@@ -37,7 +37,6 @@ const AddBird = () => {
       formDataWithImages.append('location', formData.location);
       formDataWithImages.append('description', formData.description);
 
-      // Tüm resimleri FormData'ya ekleyin
       formData.images.forEach((image, index) => {
         formDataWithImages.append(`image${index}`, image);
       });

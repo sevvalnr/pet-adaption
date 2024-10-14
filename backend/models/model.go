@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	ID       string  `json:"id,omitempty" bson:"_id,omitempty"`
+	UserID   string  `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Email    string  `json:"email,omitempty" bson:"email,omitempty"`
 	Password string  `json:"password,omitempty" bson:"password,omitempty"`
 	Location string  `json:"location,omitempty" bson:"location,omitempty"`

@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import '../styles/AdoptDog.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { fetchDogs } from '../api';
 
 const AdoptDog = ({ isLoggedIn }) => {
   const [dogs, setDogs] = useState([]);
   const [selectedDog, setSelectedDog] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/dog')
-      .then(response => response.json())
-      .then(data => setDogs(data))
-      .catch(error => console.error('Error fetching dogs:', error));
-  }, []);
+    const getDogs = async () => {
+      const dogsData = await fetchDogs();
+      setDogs(dogsData);
+    };
 
+    getDogs();
+  }, []);
   const handleDogClick = (dog) => {
     if (selectedDog && selectedDog.id === dog.id) {
       setSelectedDog(null);

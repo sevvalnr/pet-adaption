@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/AdoptCat.css';
 import { Link } from 'react-router-dom';
+import { fetchCats } from '../api';
 
 const AdoptCat = () => {
   const [cats, setCats] = useState([]);
   const [selectedCat, setSelectedCat] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/cat')
-      .then(response => response.json())
-      .then(data => setCats(data))
-      .catch(error => console.error('Error fetching cats:', error));
+    const getCats = async () => {
+      const catsData = await fetchCats();
+      setCats(catsData);
+    };
+
+    getCats();
   }, []);
 
   const handleCatClick = (cat) => {

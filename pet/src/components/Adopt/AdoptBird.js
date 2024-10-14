@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/AdoptBird.css'; // CSS dosyasını ekleyin
 import { Link } from 'react-router-dom'; // React Router'ı ekleyin
 import birdImage from '../images/bird1.jpg'; // Resmi import edin
+import { fetchBirds } from '../api';
 
 
 const AdoptBird = () => {
@@ -9,14 +10,15 @@ const AdoptBird = () => {
   const [selectedBird, setSelectedBird] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/bird')
-      .then(response => response.json())
-      .then(data => setBirds(data))
-      .catch(error => console.error('Error fetching birds:', error));
+    const getBirds = async () => {
+      const birdsData = await fetchBirds();
+      setBirds(birdsData);
+    };
+
+    getBirds();
   }, []);
 
   const handleBirdClick = (bird) => {
-    // Eğer tıklanan kuş zaten seçili kuş ise, seçili kuş durumunu null yaparak detayları kapat
     if (selectedBird && selectedBird.id === bird.id) {
       setSelectedBird(null);
     } else {
@@ -27,7 +29,6 @@ const AdoptBird = () => {
   return (
     <div className="bird-container">
       <h2 className="bird-title">Birds</h2>
-      {/* Butonu ekleyin ve "/addBird" sayfasına yönlendirin */}
       <Link to="/addBird" className="add-bird-button">Do you want to add a bird?</Link>
       <div className="bird-content">
         <div className="bird-grid">

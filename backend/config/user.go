@@ -57,7 +57,7 @@ func DeleteUser(c *fiber.Ctx) error {
 
 func CreateUser(c *fiber.Ctx) error {
 	var user models.User
-	user.ID = helpers.GenerateUUID() // Benzersiz ID atama
+	user.UserID = helpers.GenerateUUID()
 	if err := c.BodyParser(&user); err != nil {
 		return err
 	}
@@ -91,6 +91,7 @@ func CreateToken(userID string) (string, error) {
 			IssuedAt:  time.Now().Unix(),
 		},
 	}
+	fmt.Println(userID, "userr")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
@@ -128,7 +129,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := CreateToken(user.ID)
+	token, err := CreateToken(user.UserID)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{})
 	}
@@ -143,5 +144,6 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Giriş başarılı",
 		"user":    user,
+		"cookie":  token,
 	})
 }

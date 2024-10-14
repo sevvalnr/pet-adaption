@@ -79,7 +79,7 @@
 // export default LogIn;
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from './action/userAction';
+import { loginSuccess, logoutSuccess } from './action/userAction';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import "./styles/Login.css";
@@ -93,32 +93,35 @@ const LogIn = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Sayfa yenilendiğinde veya komponent yüklendiğinde cookie'yi kontrol et
-        const jwtCookie = Cookies.get('jwt');
+        const jwtCookie = Cookies.get('user_token');
         if (jwtCookie) {
             setIsLoggedIn(true);
         }
     }, []);
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      };
+      
+      // Kullanım:
+      const token = getCookie('user_token'); 
+      
 
-    const handleSubmit = async (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             if (isLoggedIn) {
                 console.log('Kullanıcı zaten giriş yapmış.');
                 return;
             }
-
             const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-
-               
-            }
-        );
+           });
 
             const data = await response.json();
 
@@ -126,9 +129,10 @@ const LogIn = () => {
                 setIsLoggedIn(true);
                 dispatch(loginSuccess());
 
-                // JWT'yi cookie içine yerleştirme
-                Cookies.set('jwt', data.token, { expires: 1, secure: true, sameSite: 'strict' });
-
+                const d = new Date();
+                d.setTime(d.getTime() + (24 * 60 * 60 * 1000));   
+                document.cookie = `user_token=${data.cookie}; expires=${d.toUTCString()}; path=/; Secure; SameSite=Lax`;
+    
                 navigate('/profile');
             } else {
                 setError(data.message);
@@ -136,7 +140,12 @@ const LogIn = () => {
         } catch (error) {
             console.error('hata cnm', error);
         }
-
+    };
+    const handleLogout = () => {
+        Cookies.remove('user_token'); 
+        setIsLoggedIn(false); 
+        dispatch(logoutSuccess()); 
+        navigate('/login'); 
     };
 
     return (
