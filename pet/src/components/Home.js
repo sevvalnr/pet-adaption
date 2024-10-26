@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles/Home.css";
+import { getUserIdFromToken } from "./helpers/auth";
 const Home = () => {
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const id = getUserIdFromToken();
+    if (id) {
+      setUserId(id); 
+    }
+  }, []);
   return (
     <div className="home-container">
       <div className="home-buttons">

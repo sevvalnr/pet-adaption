@@ -1,5 +1,5 @@
 
-import Cookies from 'js-cookie'; // Import ifadelerini en üstte sıralayın
+import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode'; 
 
 const axios = require("axios").default;
@@ -19,10 +19,8 @@ const createBearerToken = () => {
 
         if (token) {
             try {
-                // Token'ı decode et
                 const decodedToken = jwtDecode(token);
-                // userId'yi döndür
-                return decodedToken.userId; // userId'nin token'daki anahtarı
+                return decodedToken.userId;
             } catch (error) {
                 console.error("Token decode hatası:", error);
             }
@@ -58,5 +56,21 @@ const createBearerToken = () => {
     return true;
   };
 
+export const getUserIdFromToken = () => {
+  const name = "user_token=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookiesArray = decodedCookie.split(';');
+  for (let cookie of cookiesArray) {
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(name) === 0) {
+      const token = cookie.substring(name.length, cookie.length);
+      const decoded = jwtDecode(token);
+      return decoded.user_id;
+    }
+  }
+  return null;
+};
 
   

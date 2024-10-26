@@ -2,13 +2,8 @@ import { useDispatch } from 'react-redux';
 import { updateUser } from './action/userAction'; // actions.js dosyasına göre düzenleyin
 import React, { useState, useEffect } from 'react';
 import './styles/Profile.css'; // 
-
-// import AddDog from './AddDog'; 
-// import AddCat from './AddCat'; 
-// import AddBird from './AddBird';
-// import AddOther from './AddOther'; 
 import axios from 'axios';
-// const [setError, setSetError] = useState(null);
+import { getUserIdFromToken } from './helpers/auth';
 
 const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
   const dispatch = useDispatch();
@@ -20,14 +15,22 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
   const [userBirdAds, setUserBirdAds] = useState([]);
   const [userOtherAds, setUserOtherAds] = useState([]);
   const [error, setError] = useState(null);
-
+  const [userId, setUserId] = useState('');
+  const [showAddCat, setShowAddCat] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form gönderme işlemleri
+
   };
+  useEffect(() => {
+    const id = getUserIdFromToken();
+    if (id) {
+      setUserId(id); 
+    }
+  }, []);
+  console.log("User ID:", userId);
 
   useEffect(() => {
-    // Kullanıcı bilgilerini getir
+   
     const fetchUserInfo = async () => {
       try {
         const response = await axios.get('http://localhost:3000/user/:email'); 
@@ -98,17 +101,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
       setIsUpdating(false);
     }
   };
-  // const handleDeleteCat = async (name) => {
-  //   try {
-  //     const response = await axios.delete(`http://localhost:3000/cats/${name}`);
-  //     alert(response.data.message);
-  //     // Kedi silindikten sonra ilanları yeniden yükle
-  //     fetchUserCatAds();
-  //   } catch (error) {
-  //     console.error('Error deleting cat:', error);
-  //     alert('An error occurred while deleting the cat. Please try again later.');
-  //   }
-  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -121,14 +113,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
 
   return (
     <div>
-      {/* Kullanıcı bilgilerini gösterme */}
-      {/* <input type="text" name="email" value={userInfo.email} onChange={handleChange} placeholder="email" />
-      <button onClick={handleUpdate} disabled={isUpdating}>
-        {isUpdating ? 'Güncelleniyor...' : 'Güncelle'}
-      </button>
-      {updateError && <p>{updateError}</p>}
-
-      Kullanıcının ilanlarını gösterme */}
   <h2 style={{ margin: '15px auto 20px', width: 'fit-content' }}>User Advertisement</h2>
       <div className="profile-grid">
 
@@ -138,7 +122,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
                <h3>Dog</h3>
             <p><strong>Name:</strong> {dogAd.name}</p>
             <p><strong>Type:</strong> {dogAd.type}</p>
-            {/* Diğer ilan bilgilerini gösterme */}
           </div>
         ))}
         {userCatAds.map((catAd, index) => (
@@ -146,7 +129,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
                  <h3>Cat</h3>
             <p><strong>Name:</strong> {catAd.name}</p>
             <p><strong>Type:</strong> {catAd.type}</p>
-            {/* Diğer ilan bilgilerini gösterme */}
           </div>
         ))}
         {userBirdAds.map((birdAd, index) => (
@@ -154,7 +136,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
                  <h3>Bird</h3>
             <p><strong>Name:</strong> {birdAd.name}</p>
             <p><strong>Type:</strong> {birdAd.type}</p>
-            {/* Diğer ilan bilgilerini gösterme */}
           </div>
         ))}
         {userOtherAds.map((otherAd, index) => (
@@ -162,7 +143,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
                  <h3>Other</h3>
             <p><strong>Name:</strong> {otherAd.name}</p>
             <p><strong>Type:</strong> {otherAd.type}</p>
-            {/* Diğer ilan bilgilerini gösterme */}
           </div>
         ))}
       </div>

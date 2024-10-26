@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/AddPetGeneral.css'; // CSS dosyasını ekleyin
+import { useLocation } from 'react-router-dom';
 
 const AddOther = () => {
+  const location = useLocation();
+  
+  const queryParams = new URLSearchParams(location.search);
+  const userId = queryParams.get('Id');
+
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -11,6 +17,7 @@ const AddOther = () => {
     location: '',
     description: '',
     images: [], // Resimlerin listesi
+    userId: '', 
   });
 
   const [error, setError] = useState(null);
@@ -24,7 +31,11 @@ const AddOther = () => {
     // Birden fazla dosya eklemek için dosyaları bir diziye ekleyin
     setFormData({ ...formData, images: [...formData.images, e.target.files[0]] });
   };
-
+  useEffect(() => {
+    if (userId && userId !== formData.userId) {
+      setFormData(prevState => ({ ...prevState, userId }));
+    }
+  }, [userId, formData.userId]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,6 +46,7 @@ const AddOther = () => {
       formDataWithImages.append('type', formData.type);
       formDataWithImages.append('location', formData.location);
       formDataWithImages.append('description', formData.description);
+      formDataWithImages.append('userId', formData.userId); 
 
       // Tüm resimleri FormData'ya ekleyin
       formData.images.forEach((image, index) => {
@@ -52,6 +64,7 @@ const AddOther = () => {
         location: '',
         description: '',
         images: [],
+        userId: '', 
       });
       setError(null);
     } catch (error) {
@@ -64,10 +77,6 @@ const AddOther = () => {
         <div className="form-container">
           {error && <p className="error-message">{error}</p>}
           <form onSubmit={handleSubmit}>
-            <label>
-              Email:
-              <input type="text" name="email" value={formData.email} onChange={handleChange} required />
-            </label>
             <label>
               Name:
               <input type="text" name="name" value={formData.name} onChange={handleChange} required />

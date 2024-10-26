@@ -1,33 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './styles/Adopt.css'; // CSS dosyasını ekleyin
+import { getUserIdFromToken } from './helpers/auth';
 
 const AddPetPage = () => {
+  const [userId, setUserId] = useState('');
+  useEffect(() => {
+    const id = getUserIdFromToken();
+    if (id) {
+      setUserId(id); 
+    }
+  }, [userId]);
+  console.log(userId)
+
   return (
     <div className="adopt-container">
       <h2>Add Pet</h2>
       <div className="button-container">
         <div className='buttonDog-container'>
-        <Link to="/addDog">
+        <Link to={`/addDog?Id=${userId}`}>          
           <button> </button>
         </Link>
         <div>Dog</div>
         </div>
         
         <div className='buttonCat-container'>
-        <Link to="/addCat">
+        <Link to={`/addCat?Id=${userId}`}>         
           <button> </button>
         </Link>
         <div>Cat</div>
         </div>
         <div className='buttonBird-container'>
-        <Link to="/addBird">
-          <button> </button>
+        <Link to={`/addBird?Id=${userId}`}>    
+        <button> </button>     
         </Link>
         <div>Bird</div>
         </div>
         <div className='buttonOther-container'>
-        <Link to="/addOther">
+        <Link to={`/addOther?Id=${userId}`}>
           <button> </button>
         </Link>
         <div>Other</div>

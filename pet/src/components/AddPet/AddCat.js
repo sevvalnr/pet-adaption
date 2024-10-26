@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/AddPetGeneral.css'; // CSS dosyasını ekleyin
+import '../styles/AddPetGeneral.css';
+import { useLocation } from 'react-router-dom';
 const AddCat = () => {
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const userId = queryParams.get('Id');
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -9,7 +14,8 @@ const AddCat = () => {
     type: '',
     location: '',
     description: '',
-    images: [], // Resimlerin listesi
+    images: [],
+    userId: '',
   });
 
   const [error, setError] = useState(null);
@@ -20,9 +26,14 @@ const AddCat = () => {
   };
 
   const handleImageChange = (e) => {
-    // Birden fazla dosya eklemek için dosyaları bir diziye ekleyin
     setFormData({ ...formData, images: [...formData.images, e.target.files[0]] });
   };
+
+  useEffect(() => {
+    if (userId && userId !== formData.userId) {
+      setFormData(prevState => ({ ...prevState, userId }));
+    }
+  }, [userId, formData.userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,8 +45,8 @@ const AddCat = () => {
       formDataWithImages.append('type', formData.type);
       formDataWithImages.append('location', formData.location);
       formDataWithImages.append('description', formData.description);
+      formDataWithImages.append('userId', formData.userId); 
 
-      // Tüm resimleri FormData'ya ekleyin
       formData.images.forEach((image, index) => {
         formDataWithImages.append(`image${index}`, image);
       });
@@ -51,6 +62,7 @@ const AddCat = () => {
         location: '',
         description: '',
         images: [],
+        userId: '', 
       });
       setError(null);
     } catch (error) {
@@ -63,10 +75,6 @@ const AddCat = () => {
     <div className="form-container">
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input type="text" name="email" value={formData.email} onChange={handleChange} required />
-        </label>
         <label>
           Name:
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
