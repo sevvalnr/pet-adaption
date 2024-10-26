@@ -30,7 +30,7 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
     // Kullanıcı bilgilerini getir
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/user/:email'); // E-posta parametresini geçmelisiniz
+        const response = await axios.get('http://localhost:3000/user/:email'); 
         setUserInfo(response.data);
         setError(null);
       } catch (error) {
@@ -89,7 +89,6 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
 
   const handleUpdate = () => {
     setIsUpdating(true);
-    // Profili güncelleme işlemi
     try {
       dispatch(updateUser(userID, userInfo));
       alert('Profil güncellendi!');

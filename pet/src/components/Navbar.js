@@ -8,11 +8,9 @@ import "./styles/Navbar.css";
 
 const Navbar = ({ isLoggedIn, dispatch }) => {
   useEffect(() => {
-    // Her bileşen yeniden render edildiğinde cookie kontrolü yapılacak
     const jwtCookie = Cookies.get('jwt');
     const isLoggedInCookie = !!jwtCookie;
     if (isLoggedIn !== isLoggedInCookie) {
-      // isLoggedIn değeri cookie değerine eşit değilse, durumu güncelle
       dispatch({
         type: isLoggedInCookie ? 'LOGIN_SUCCESS' : 'LOGOUT_SUCCESS'
       });
@@ -21,7 +19,7 @@ const Navbar = ({ isLoggedIn, dispatch }) => {
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
-    Cookies.remove('jwt'); // Cookie'yi sil
+    Cookies.remove('jwt');
   };
 
   return (

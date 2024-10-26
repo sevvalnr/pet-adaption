@@ -83,6 +83,7 @@ import { loginSuccess, logoutSuccess } from './action/userAction';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import "./styles/Login.css";
+import { getUserId } from './helpers/auth';
 
 const LogIn = () => {
     const [email, setEmail] = useState('');
@@ -91,6 +92,8 @@ const LogIn = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [userId, setUserId] = useState(null); 
+
 
     useEffect(() => {
         const jwtCookie = Cookies.get('user_token');
@@ -98,14 +101,7 @@ const LogIn = () => {
             setIsLoggedIn(true);
         }
     }, []);
-    const getCookie = (name) => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-      };
-      
-      // Kullanım:
-      const token = getCookie('user_token'); 
+
       
 
       const handleSubmit = async (e) => {
@@ -147,6 +143,18 @@ const LogIn = () => {
         dispatch(logoutSuccess()); 
         navigate('/login'); 
     };
+
+
+    useEffect(() => {
+        const id = getUserId(); 
+        setUserId(id); 
+    }, []); 
+
+    useEffect(() => {
+        if (userId) {
+            console.log("User ID:", userId); // userId var ise konsola yazdır
+        }
+    }, [userId]);
 
     return (
         <div className="login-container">
