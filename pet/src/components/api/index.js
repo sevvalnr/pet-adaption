@@ -78,3 +78,46 @@ export  const fetchOther = async () => {
     console.error('Error fetching dogs:', error);
   }
 };
+export  const fetchBirdsByUserId = async (
+  userId,
+) => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/birds/${userId}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dogs:', error);
+  }
+};
+
+export  const fetchCatsByUserId = async (
+  userId,
+) => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/cats/${userId}`);
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dogs:', error);
+  }
+};
+export  const fetchDogsByUserId = async (
+  userId,
+) => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/dogs/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dogs:', error);
+  }
+};
+export  const fetchOthersByUserId = async (
+  userId,
+) => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/others/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching dogs:', error);
+  }
+};

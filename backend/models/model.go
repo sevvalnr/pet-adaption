@@ -22,6 +22,8 @@ type User struct {
 
 type Dogs struct {
 	ID          string    `json:"id,omitempty" bson:"_id,omitempty"`
+	PetID       string    `json:"petId,omitempty" bson:"petId,omitempty"`
+	UserID      string    `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Email       string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name        string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age         string    `json:"age,omitempty" bson:"age,omitempty"`
@@ -34,6 +36,8 @@ type Dogs struct {
 
 type Cats struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	PetID     string    `json:"petId,omitempty" bson:"petId,omitempty"`
+	UserID    string    `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
@@ -45,6 +49,8 @@ type Cats struct {
 
 type Birds struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	PetID     string    `json:"petId,omitempty" bson:"petId,omitempty"`
+	UserID    string    `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`
@@ -56,6 +62,8 @@ type Birds struct {
 
 type Other struct {
 	ID        string    `json:"id,omitempty" bson:"_id,omitempty"`
+	PetID     string    `json:"petId,omitempty" bson:"petId,omitempty"`
+	UserID    string    `json:"user_id,omitempty" bson:"user_id,omitempty"`
 	Email     string    `json:"email,omitempty" bson:"email,omitempty"`
 	Name      string    `json:"name,omitempty" bson:"name,omitempty"`
 	Age       int       `json:"age,omitempty" bson:"age,omitempty"`

@@ -31,7 +31,7 @@ func InitializeDogCollection() {
 
 func CreateDog(c *fiber.Ctx) error {
 	var dog models.Dogs
-	dog.ID = helpers.GenerateUUID() // Bu satırı güncelleyerek büyük harfle başlatın
+	dog.PetID = helpers.GenerateUUID()
 	if err := c.BodyParser(&dog); err != nil {
 		return err
 	}
@@ -104,6 +104,28 @@ func GetDogById(c *fiber.Ctx) error {
 	if err := cursor.All(context.Background(), &dogs); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch dogs",
+		})
+	}
+
+	return c.JSON(dogs)
+}
+func HandleGetDogsByUserID(c *fiber.Ctx) error {
+	userId := c.Params("userId")
+
+	filter := bson.M{"user_id": userId}
+	var dogs []models.Dogs
+
+	cursor, err := dogCollection.Find(context.TODO(), filter)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	if err := cursor.All(context.TODO(), &dogs); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Veriler alınamadı",
 		})
 	}
 

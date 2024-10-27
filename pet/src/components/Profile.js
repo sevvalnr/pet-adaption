@@ -4,111 +4,92 @@ import React, { useState, useEffect } from 'react';
 import './styles/Profile.css'; // 
 import axios from 'axios';
 import { getUserIdFromToken } from './helpers/auth';
+import { fetchBirdsByUserId, fetchCatsByUserId, fetchDogsByUserId, fetchOthersByUserId } from './api';
 
 const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState(initialUserInfo || { name: '', email: '' });
-  const [updateError, setUpdateError] = useState(null);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [userDogAds, setUserDogAds] = useState([]);
-  const [userCatAds, setUserCatAds] = useState([]);
-  const [userBirdAds, setUserBirdAds] = useState([]);
-  const [userOtherAds, setUserOtherAds] = useState([]);
-  const [error, setError] = useState(null);
   const [userId, setUserId] = useState('');
-  const [showAddCat, setShowAddCat] = useState(false);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const[userDogs, setUserDogs] = useState([])
+  const[userCats, setUserCats] = useState([])
+  const[userOthers, setUserOthers] = useState([])
+  const[userBirds, setUserBirds] = useState([])
 
-  };
+  const [showAddCat, setShowAddCat] = useState(false);
+  const [selectedBird, setSelectedBird] = useState(null);
+  const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedDog, setSelectedDog] = useState(null);
+  const [selectedOther, setSelectedOther] = useState(null);
   useEffect(() => {
     const id = getUserIdFromToken();
     if (id) {
       setUserId(id); 
     }
   }, []);
-  console.log("User ID:", userId);
-
   useEffect(() => {
-   
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/user/:email'); 
-        setUserInfo(response.data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-        setError('An error occurred while fetching user info. Please try again later.');
+    const fetchBirdsByUser = async () => {
+      if (userId) {
+      const birdsData = await fetchBirdsByUserId(userId);
+      setUserBirds(birdsData);
       }
     };
+    fetchBirdsByUser();
+  }, [userId]);
+  useEffect(() => {
+    const fetchDogsByUser = async () => {
+      if (userId) {
+      const dogsData = await fetchDogsByUserId(userId);
+      setUserDogs(dogsData);
+      }
+    };
+    fetchDogsByUser();
+  }, [userId]);
+  useEffect(() => {
+    const fetchCatsByUser = async () => {
+      if (userId) {
+      const catsData = await fetchCatsByUserId(userId);
+      setUserCats(catsData);
+      }
+    };
+    fetchCatsByUser();
+  }, [userId]);
+  useEffect(() => {
+    const fetchOthersByUser = async () => {
+      if (userId) {
+      const othersData = await fetchOthersByUserId(userId);
+      setUserOthers(othersData);
+    }
+    };
+    fetchOthersByUser();
+  }, [userId]);
 
-    const fetchUserDogAds = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/dog/${userInfo.email}`);
-        setUserDogAds(response.data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching user dog ads:', error);
-        setError('An error occurred while fetching user dog ads. Please try again later.');
-      }
-    };
-    
-    const fetchUserCatAds = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/cat/${userInfo.email}`);
-        setUserCatAds(response.data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching user cat ads:', error);
-        setError('An error occurred while fetching user cat ads. Please try again later.');
-      }
-    };
-    const fetchUserBirdAds = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/bird/${userInfo.email}`);
-        setUserBirdAds(response.data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching user bird ads:', error);
-        setError('An error occurred while fetching user bird ads. Please try again later.');
-      }
-    };
-    const fetchUserOtherAds = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/others/${userInfo.email}`);
-        setUserOtherAds(response.data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching user other ads:', error);
-        setError('An error occurred while fetching user other ads. Please try again later.');
-      }
-    };
-    fetchUserInfo();
-    fetchUserDogAds();
-    fetchUserCatAds();
-    fetchUserBirdAds();
-    fetchUserOtherAds();
-  }, [userInfo.email]);
 
-  const handleUpdate = () => {
-    setIsUpdating(true);
-    try {
-      dispatch(updateUser(userID, userInfo));
-      alert('Profil güncellendi!');
-    } catch (error) {
-      setUpdateError('Profil güncelleme hatası!');
-    } finally {
-      setIsUpdating(false);
+  const handleBirdClick = (userBirds) => {
+    if (selectedBird && selectedBird.id === userBirds.id) {
+      setSelectedBird(null);
+    } else {
+      setSelectedBird(userBirds);
     }
   };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Kullanıcı bilgilerini güncelleme
-    setUserInfo(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+  const handleOtherClick = (userOthers) => {
+    if (selectedOther && selectedOther.id === userOthers.id) {
+      setSelectedOther(null);
+    } else {
+      setSelectedOther(userOthers);
+    }
+  };
+  const handleCatClick = (userCats) => {
+    if (selectedCat && selectedCat.id === userCats.id) {
+      setSelectedCat(null);
+    } else {
+      setSelectedCat(userCats);
+    }
+  };
+  const handleDogClick = (userDogs) => {
+    if (selectedDog && selectedDog.id === userDogs.id) {
+      selectedDog(null);
+    } else {
+      selectedDog(userBirds);
+    }
   };
 
   return (
@@ -116,37 +97,41 @@ const Profile = ({ userID, initialUserInfo, isLoggedIn }) => {
   <h2 style={{ margin: '15px auto 20px', width: 'fit-content' }}>User Advertisement</h2>
       <div className="profile-grid">
 
-        {userDogAds.map((dogAd, index) => (
-             
-          <div key={index} className="profile-grid-item1">
-               <h3>Dog</h3>
-            <p><strong>Name:</strong> {dogAd.name}</p>
-            <p><strong>Type:</strong> {dogAd.type}</p>
-          </div>
-        ))}
-        {userCatAds.map((catAd, index) => (
-          <div key={index} className="profile-grid-item2">
-                 <h3>Cat</h3>
-            <p><strong>Name:</strong> {catAd.name}</p>
-            <p><strong>Type:</strong> {catAd.type}</p>
-          </div>
-        ))}
-        {userBirdAds.map((birdAd, index) => (
-          <div key={index} className="profile-grid-item3">
-                 <h3>Bird</h3>
-            <p><strong>Name:</strong> {birdAd.name}</p>
-            <p><strong>Type:</strong> {birdAd.type}</p>
-          </div>
-        ))}
-        {userOtherAds.map((otherAd, index) => (
-          <div key={index} className="profile-grid-item4">
-                 <h3>Other</h3>
-            <p><strong>Name:</strong> {otherAd.name}</p>
-            <p><strong>Type:</strong> {otherAd.type}</p>
-          </div>
-        ))}
+         <div className="bird-grid">
+          {userBirds?.map(userBirds => (
+            <div key={userBirds.id} className="bird-card" onClick={() => handleBirdClick(userBirds)}>
+              <p><strong>Name:</strong> {userBirds.name}</p>
+              <p><strong>Type:</strong> {userBirds.type}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bird-grid">
+          {userCats?.map(userCats => (
+            <div key={userCats.id} className="bird-card" onClick={() => handleCatClick(userCats)}>
+              <p><strong>Name:</strong> {userCats.name}</p>
+              <p><strong>Type:</strong> {userCats.type}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bird-grid">
+          {userDogs?.map(userDogs => (
+            <div key={userDogs.id} className="bird-card" onClick={() => handleDogClick(userBirds)}>
+              <p><strong>Name:</strong> {userDogs.name}</p>
+              <p><strong>Type:</strong> {userDogs.type}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bird-grid">
+          {userOthers?.map(userOthers => (
+            <div key={userOthers.id} className="bird-card" onClick={() => handleOtherClick(userOthers)}>
+              <p><strong>Name:</strong> {userOthers.name}</p>
+              <p><strong>Type:</strong> {userOthers.type}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+      
+      </div>
   );
 };
 

@@ -31,7 +31,7 @@ func InitializeCatCollection() {
 }
 func CreateCat(c *fiber.Ctx) error {
 	var cat models.Cats
-	cat.ID = helpers.GenerateUUID()
+	cat.PetID = helpers.GenerateUUID()
 	if err := c.BodyParser(&cat); err != nil {
 		return err
 	}
@@ -125,4 +125,26 @@ func DeleteCat(c *fiber.Ctx) error {
 
 	// Başarı durumunu döndür
 	return c.JSON(fiber.Map{"message": "Cat deleted successfully"})
+}
+func HandleGetCatsByUserID(c *fiber.Ctx) error {
+	userId := c.Params("userId")
+
+	filter := bson.M{"user_id": userId}
+	var cats []models.Cats
+
+	cursor, err := catCollection.Find(context.TODO(), filter)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	if err := cursor.All(context.TODO(), &cats); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Veriler alınamadı",
+		})
+	}
+
+	return c.JSON(cats)
 }

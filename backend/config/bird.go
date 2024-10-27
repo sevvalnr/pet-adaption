@@ -30,7 +30,7 @@ func InitializeBirdCollection() {
 }
 func CreateBird(c *fiber.Ctx) error {
 	var bird models.Birds
-	bird.ID = helpers.GenerateUUID() // Benzersiz ID atama
+	bird.PetID = helpers.GenerateUUID() // Benzersiz ID atama
 	if err := c.BodyParser(&bird); err != nil {
 		return err
 	}
@@ -80,6 +80,29 @@ func GetBirdsByEmail(c *fiber.Ctx) error {
 	if err := cursor.All(context.Background(), &birds); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch birds",
+		})
+	}
+
+	return c.JSON(birds)
+}
+func HandleGetBirdsByUserID(c *fiber.Ctx) error {
+	userId := c.Params("userId")
+
+	// MongoDB sorgusu
+	filter := bson.M{"user_id": userId}
+	var birds []models.Birds
+
+	cursor, err := birdCollection.Find(context.TODO(), filter)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	if err := cursor.All(context.TODO(), &birds); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Veriler alınamadı",
 		})
 	}
 

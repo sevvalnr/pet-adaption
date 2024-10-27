@@ -30,7 +30,7 @@ func InitializeOtherCollection() {
 }
 func CreateOther(c *fiber.Ctx) error {
 	var other models.Other
-	other.ID = helpers.GenerateUUID() // Benzersiz ID atama
+	other.PetID = helpers.GenerateUUID()
 	if err := c.BodyParser(&other); err != nil {
 		return err
 	}
@@ -80,6 +80,28 @@ func GetOthersByEmail(c *fiber.Ctx) error {
 	if err := cursor.All(context.Background(), &others); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to fetch others",
+		})
+	}
+
+	return c.JSON(others)
+}
+func HandleGetOthersByUserID(c *fiber.Ctx) error {
+	userId := c.Params("userId")
+
+	filter := bson.M{"user_id": userId}
+	var others []models.Other
+
+	cursor, err := otherCollection.Find(context.TODO(), filter)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+	defer cursor.Close(context.Background())
+
+	if err := cursor.All(context.TODO(), &others); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Veriler alınamadı",
 		})
 	}
 

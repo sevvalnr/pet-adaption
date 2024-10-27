@@ -132,20 +132,24 @@ func PetEndpoints(app *fiber.App) {
 
 	app.Post("/dog/add", config.CreateDog)
 	app.Get("/dog", config.GetDogs)
-	app.Get("/dog/:email", config.GetDogsByEmail)
+	app.Get("/dog/:userId", config.GetDogsByEmail)
 	app.Get("/dog/:id", config.GetDogById)
+	app.Get("/dogs/:userId", config.HandleGetDogsByUserID)
 
 	app.Post("/cat/add", config.CreateCat)
 	app.Get("/cat", config.GetCats)
 	app.Get("/cat/:email", config.GetCatsByEmail)
 	app.Delete("/cats:name", config.DeleteCat)
+	app.Get("/cats/:userId", config.HandleGetCatsByUserID)
 
 	app.Post("/bird/add", config.CreateBird)
 	app.Get("/bird", config.GetBirds)
 	app.Get("/bird/:email", config.GetBirdsByEmail)
+	app.Get("/birds/:userId", config.HandleGetBirdsByUserID)
 
 	app.Post("/other/add", config.CreateOther)
 	app.Get("/other", config.GetOthers)
 	app.Get("/other/:email", config.GetOthersByEmail)
+	app.Get("/others/:userId", config.HandleGetOthersByUserID)
 
 }
