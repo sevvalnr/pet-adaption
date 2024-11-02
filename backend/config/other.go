@@ -107,3 +107,22 @@ func HandleGetOthersByUserID(c *fiber.Ctx) error {
 
 	return c.JSON(others)
 }
+func HandleGetOtherByPetId(c *fiber.Ctx) error {
+	petId := c.Params("petId")
+
+	filter := bson.M{"petId": petId}
+	var other models.Cats
+	err := otherCollection.FindOne(context.TODO(), filter).Decode(&other)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "other bulunamadı",
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+
+	return c.JSON(other)
+}

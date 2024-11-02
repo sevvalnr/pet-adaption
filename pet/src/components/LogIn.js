@@ -59,12 +59,10 @@ const LogIn = () => {
     };
 
         const handleLogout = () => {
-          // Expire the user_token cookie by setting it to a past date
           document.cookie = 'user_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Lax';
           
-          // Update login state and redirect user
           dispatch(logoutSuccess());
-          navigate('/login'); // Redirect to the login page after logout
+          navigate('/login'); 
         };
     useEffect(() => {
         const id = getUserId(); 

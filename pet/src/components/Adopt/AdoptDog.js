@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/AdoptDog.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchDogs } from '../api';
+import { fetchDogsAction } from '../action/dogAction';
 
-const AdoptDog = ({ isLoggedIn }) => {
-  const [dogs, setDogs] = useState([]);
+const AdoptDog = ({ isLoggedIn, fetchDogsAction, dogsState }) => {
   const [selectedDog, setSelectedDog] = useState(null);
 
   useEffect(() => {
-    const getDogs = async () => {
-      const dogsData = await fetchDogs();
-      setDogs(dogsData);
+    const fetchData = async () => {
+      try {
+        await fetchDogsAction();
+      } catch (error) {
+      }
     };
+    fetchData();
+  }, [fetchDogsAction]);
 
-    getDogs();
-  }, []);
   const handleDogClick = (dog) => {
     if (selectedDog && selectedDog.id === dog.id) {
       setSelectedDog(null);
@@ -32,15 +33,19 @@ const AdoptDog = ({ isLoggedIn }) => {
         </div>
       )}
       <div className="dog-grid">
-        {dogs.map(dog => (
-          <div key={dog.id} className="dog-card" onClick={() => handleDogClick(dog)}>
-            <p><strong>Name:</strong> {dog.name}</p>
-            <p><strong>Type:</strong> {dog.type}</p>
-            {dog.images && dog.images.length > 0 && (
-              <img src={`http://localhost:3000/${dog.images[0]}`} alt={`${dog.name}`} className="dog-image" />
-            )}
-          </div>
-        ))}
+        {dogsState && dogsState.length > 0 ? (
+          dogsState.map(dog => (
+            <div key={dog.id} className="dog-card" onClick={() => handleDogClick(dog)}>
+              <p><strong>Name:</strong> {dog.name}</p>
+              <p><strong>Type:</strong> {dog.type}</p>
+              {dog.images && dog.images.length > 0 && (
+                <img src={`http://localhost:3000/${dog.images[0]}`} alt={`${dog.name}`} className="dog-image" />
+              )}
+            </div>
+          ))
+        ) : (
+          <p>Veri yok</p>
+        )}
       </div>
       {selectedDog && (
         <div>
@@ -60,6 +65,11 @@ const AdoptDog = ({ isLoggedIn }) => {
 
 const mapStateToProps = (state) => ({
   isLoggedIn: state.user.isLoggedIn,
+  dogsState: state.dogs.dogs,
 });
 
-export default connect(mapStateToProps)(AdoptDog);
+const mapDispatchToProps = (dispatch) => ({
+  fetchDogsAction: () => dispatch(fetchDogsAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdoptDog);

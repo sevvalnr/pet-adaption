@@ -108,3 +108,22 @@ func HandleGetBirdsByUserID(c *fiber.Ctx) error {
 
 	return c.JSON(birds)
 }
+func HandleGetbBirdByPetId(c *fiber.Ctx) error {
+	petId := c.Params("petId")
+
+	filter := bson.M{"petId": petId}
+	var bird models.Birds
+	err := birdCollection.FindOne(context.TODO(), filter).Decode(&bird)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "Kedi bulunamadı",
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+
+	return c.JSON(bird)
+}

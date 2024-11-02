@@ -1,5 +1,4 @@
 import axios from 'axios';
-//import Cookies from 'js-cookie';
 
 const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
@@ -42,8 +41,10 @@ const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000'
 export  const fetchDogs = async () => {
   try {
     const response = await axios.get(`${apiBaseUrl}/dog`);
-    console.log(response.data,"havvv")
+    console.log(response.data,"data")
+
     return response.data;
+    console.log(response.data,"data")
   } catch (error) {
     console.error('Error fetching dogs:', error);
   }

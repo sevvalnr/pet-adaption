@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -147,4 +148,25 @@ func HandleGetCatsByUserID(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(cats)
+}
+func HandleGetCatByPetId(c *fiber.Ctx) error {
+	petId := c.Params("petId")
+
+	filter := bson.M{"petId": petId}
+	var cat models.Cats
+	fmt.Println(petId, "petID")
+	err := catCollection.FindOne(context.TODO(), filter).Decode(&cat)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"error": "Kedi bulunamadı",
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Bir hata oluştu",
+		})
+	}
+	fmt.Println(cat, "cat")
+
+	return c.JSON(cat)
 }
