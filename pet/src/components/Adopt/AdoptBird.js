@@ -3,9 +3,11 @@ import '../styles/AdoptBird.css'; // CSS dosyasını ekleyin
 import { Link } from 'react-router-dom'; // React Router'ı ekleyin
 import birdImage from '../images/bird1.jpg'; // Resmi import edin
 import { fetchBirds } from '../api';
+import { connect } from 'react-redux';
+import { fetchBirdsAction } from '../action/birdAction';
 
 
-const AdoptBird = () => {
+const AdoptBird = ({ fetchBirdsAction, birdsState}) => {
   const [birds, setBirds] = useState([]);
   const [selectedBird, setSelectedBird] = useState(null);
 
@@ -25,6 +27,15 @@ const AdoptBird = () => {
       setSelectedBird(bird);
     }
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchBirdsAction();
+      } catch (error) {
+      }
+    };
+    fetchData();
+  }, [fetchBirdsAction]);
 
   return (
     <div className="bird-container">
@@ -32,12 +43,17 @@ const AdoptBird = () => {
       <Link to="/addBird" className="add-bird-button">Do you want to add a bird?</Link>
       <div className="bird-content">
         <div className="bird-grid">
-          {birds.map(bird => (
+        {birdsState && birdsState.length > 0 ? (
+          birdsState.map(bird => (
             <div key={bird.id} className="bird-card" onClick={() => handleBirdClick(bird)}>
               <p><strong>Name:</strong> {bird.name}</p>
               <p><strong>Type:</strong> {bird.type}</p>
-            </div>
-          ))}
+              </div> 
+                ))
+  ) : (
+    <p>Veri yok</p>
+  )}
+  
         </div>
         {selectedBird && (
           <div className="bird-details">
@@ -54,5 +70,11 @@ const AdoptBird = () => {
         
   );
 };
+const mapStateToProps = (state) => ({
+  birdsState: state.birds.birds, 
+});
 
-export default AdoptBird;
+const mapDispatchToProps = (dispatch) => ({
+  fetchBirdsAction: () => dispatch(fetchBirdsAction()), 
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AdoptBird);

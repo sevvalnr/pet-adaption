@@ -30,7 +30,7 @@ const Navbar = ({ isLoggedIn, dispatch }) => {
       <div style={{ display: isLoggedIn ? 'none' : 'block' }}>
         <Link to="/profile">Profile</Link>
       </div>
-      <div style={{ display: !isLoggedIn  ? 'none' : 'block' }}>
+      <div style={{ display: isLoggedIn  ? 'none' : 'block' }}>
         <Link to="/signUp">SignUp</Link>
       </div>
       <div style={{ display: isLoggedIn ? 'block' : 'none' }}>

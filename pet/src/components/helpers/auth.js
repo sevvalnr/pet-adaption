@@ -20,6 +20,7 @@ const createBearerToken = () => {
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
+                console.log(decodedToken.userId,"auth.js 1")
                 return decodedToken.userId;
             } catch (error) {
                 console.error("Token decode hatası:", error);
@@ -67,6 +68,7 @@ export const getUserIdFromToken = () => {
     if (cookie.indexOf(name) === 0) {
       const token = cookie.substring(name.length, cookie.length);
       const decoded = jwtDecode(token);
+      console.log(decoded.user_id,"authhhh2")
       return decoded.user_id;
     }
   }
