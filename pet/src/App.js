@@ -17,6 +17,9 @@ import AddCat from "./components/AddPet/AddCat";
 import AddBird from "./components/AddPet/AddBird";
 import AddOther from "./components/AddPet/AddOther";
 import AddDog from "./components/AddPet/AddDog";
+import BirdDetail from "./components/Adopt/DetailPage/BirdDetail";
+import CatDetail from "./components/Adopt/DetailPage/CatDetail";
+import DogDetail from "./components/Adopt/DetailPage/DogDetail";
 
 
 
@@ -41,6 +44,11 @@ function App() {
           <Route path="/addCat" element={<AddCat />} />
           <Route path="/addBird" element={<AddBird />} />
           <Route path="/addOther" element={<AddOther />} />
+          <Route path="/bird/:birdId" element={<BirdDetail />} /> 
+          <Route path="/cat/:catId" element={<CatDetail />} /> 
+          <Route path="/dog/:dogId" element={<DogDetail />} /> 
+
+
         </Routes>
       </Router>
     </Provider>

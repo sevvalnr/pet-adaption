@@ -1,39 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/AdoptDog.css'; // CSS dosyasını ekleyin
 import { Link } from 'react-router-dom'; // React Router'ı ekleyin
+import { fetchOther } from '../api';
+import { connect } from 'react-redux';
+import { fetchOthersAction } from '../action/otherAction';
 
-const AdoptOther = () => {
+const AdoptOther = ({fetchOthersAction, othersData}) => {
   const [others, setOthers] = useState([]);
   const [selectedBird, setSelectedBird] = useState(null);
-
   useEffect(() => {
-    fetch('http://localhost:3000/other')
-      .then(response => response.json())
-      .then(data => setOthers(data))
-      .catch(error => console.error('Error fetching dogs:', error));
-  }, []);
+    const getOther = async () => {
+      const otherData = await fetchOther();
+      setOthers(otherData);
+    };
 
+    getOther();
+  }, []);
   const handleCatClick = (other) => {
-    // Eğer tıklanan kedi zaten seçili kedi ise, seçili kedi durumunu null yaparak detayları kapat
     if (selectedBird && selectedBird.id === other.id) {
       setSelectedBird(null);
     } else {
       setSelectedBird(other);
     }
   };
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchOthersAction();
+      } catch (error) {
+      }
+    };
+    fetchData();
+  }, [fetchOthersAction]);
   return (
     <div>
       <h2>others</h2>
-      {/* Butonu ekleyin ve "/addDog" sayfasına yönlendirin */}
       <Link to="/addOther" className="add-dog-button">Do you want to add a Other?</Link>
       <div className="dog-grid">
-        {others.map(other => (
+      {othersData && othersData.length > 0 ? (
+        othersData.map(other => (
           <div key={other.id} className="dog-card" onClick={() => handleCatClick(other)}>
             <p><strong>Name:</strong> {other.name}</p>
             <p><strong>Type:</strong> {other.type}</p>
-          </div>
-        ))}
+            </div> 
+                ))
+  ) : (
+    <p>Veri yok</p>
+  )}
+  
       </div>
       {selectedBird && (
         <div>
@@ -48,5 +62,11 @@ const AdoptOther = () => {
   );
 
 };
+const mapStateToProps = (state) => ({
+  othersData: state.others.others, 
+});
 
-export default AdoptOther;
+const mapDispatchToProps = (dispatch) => ({
+  fetchOthersAction: () => dispatch(fetchOthersAction()), 
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AdoptOther);
