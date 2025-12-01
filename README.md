@@ -162,10 +162,6 @@ Build the Go binary with `go build` and deploy to your server.
 3. Test thoroughly
 4. Submit a pull request
 
-## License
-
-This project is part of the pet adoption initiative.
-
 ## Support
 
 For issues or questions, please contact
